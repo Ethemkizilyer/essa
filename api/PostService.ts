@@ -1,5 +1,5 @@
-"use client"
-import { BaseService } from './BaseService';
+
+import { BaseService } from './BaseService'
 
 export interface Post {
   id: number;
@@ -8,10 +8,7 @@ export interface Post {
   userId: number;
 }
 
-export class PostService extends BaseService<Post> {
-  // constructor() {
-  //   super('https://jsonplaceholder.typicode.com/posts');
-  // }
-  protected endpoint = '/posts';
-  // Post'lara özgü ek metodlar burada tanımlanabilir
+export class PostService extends BaseService<Post> { 
+  protected endpoint = '/posts'
 }
+ 

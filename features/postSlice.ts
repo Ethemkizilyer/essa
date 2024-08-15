@@ -12,6 +12,10 @@ export const createPost = createAsyncThunk('posts/create', async (post: Post) =>
   return await postService.create(post);
 });
 
+export const getPost = createAsyncThunk('posts/getPost', async (id: number) => {
+  return await postService.getById(id);
+});
+
 export const updatePost = createAsyncThunk('posts/update', async (post: Post) => {
     console.log("post",post)
   return await postService.update(post.id, post);
@@ -24,12 +28,14 @@ export const deletePost = createAsyncThunk('posts/delete', async (id: number) =>
 
 interface PostState {
   data: Post[];
+  post: Post | null;
   loading: boolean;
   error: string | null;
 }
 
 const initialState: PostState = {
   data: [],
+  post:null,
   loading: false,
   error: null,
 };
@@ -46,6 +52,17 @@ const postSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(getPost.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getPost.fulfilled, (state, action) => {
+        state.loading = false;
+        state.post = action.payload;
+      })
+      .addCase(getPost.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || 'Failed to fetch post';
+      })
       .addCase(fetchPosts.pending, (state) => {
         state.loading = true;
       })

@@ -1,18 +1,19 @@
 "use client"
 
 import React, { useEffect, useState } from "react";
-import { Post, PostService } from "../api/PostService";
+import { Post } from "../api/PostService";
 import { useDispatch, useSelector } from "react-redux";
 import { createPost, deletePost, fetchPosts, postUpdate, updatePost } from "../features/postSlice";
 import { AppDispatch, RootState } from "../store/store";
 import Loading from "./Loading";
 import Error from "./Error";
+import { useRouter } from "next/navigation";
 
 const PostComponent: React.FC = () => {
-  const postService = new PostService()
   const dispatch = useDispatch<AppDispatch>();
+  const router=useRouter()
   const { data: posts, loading, error } = useSelector((state: RootState) => state.posts);
-  const [update, setUpdate] = useState<Post>({ id: 0, title: "", body: "asdsad",userId:1 })
+  const [update, setUpdate] = useState<Post>({ id: 0, title: "", body: "",userId:1 })
 
   useEffect(() => {
     dispatch(fetchPosts());
@@ -78,7 +79,7 @@ const PostComponent: React.FC = () => {
         )}
 
         {posts.map((post) => (
-          <div className="flex flex-col bg-white justify-center items-center text-center shadow-md rounded-lg overflow-hidden h-36 w-72 group relative border m-2">
+          <div onClick={()=>router.push(`/detail/${post.id}`)} className="flex flex-col bg-white justify-center items-center text-center shadow-md rounded-lg overflow-hidden h-36 w-72 group relative border m-2">
             <div key={post.id}>{post.title}</div>
             <div>
               <button
